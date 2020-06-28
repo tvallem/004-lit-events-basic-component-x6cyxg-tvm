@@ -9,7 +9,11 @@ class BasicElement extends LitElement {
       logged: { type: Boolean },
       error: { type: Boolean },
       correctEmail: { type: String },
-      correctPassword: { type: String }
+      correctPassword: { type: String },
+      validEmail: { type: Boolean },
+      validPasswd: { type: Boolean },
+      buttonDisable: { type: String },
+      message: { type: String }
     };
   }
 
@@ -21,6 +25,10 @@ class BasicElement extends LitElement {
     this.error=false;
     this.correctEmail="t@t.com";
     this.correctPassword="1234";
+    this.validEmail=false;
+    this.validPasswd=false;
+    this.buttonDisable="disabled"; //El botón Submit está deshabilitado por defecto
+    this.message="";
   }
 
   createRenderRoot() {
@@ -43,7 +51,8 @@ class BasicElement extends LitElement {
               aria-describedby="emailHelp"
               placeholder="Enter email"
               .value = "${this.email}"
-              @keyup = "${(e) => {this._setEmail(e.target.value)}}"
+              @keyup = "${(e) => {this._setEmail(e.target.value);
+                                  this._validateEmail(e.target.value)}}"
             />
             <small id="emailHelp" class="form-text text-muted"
               >We'll never share your email with anyone else.</small
@@ -55,14 +64,20 @@ class BasicElement extends LitElement {
               type="password"
               class="form-control"
               id="exampleInputPassword1"
+              aria-describedby="passAlert"
               placeholder="Password"
               .value = "${this.password}"
-              @keyup = "${(e) => {this._setPassword(e.target.value)}}"              
+              @keyup = "${(e) => {this._setPassword(e.target.value)}}"
+              @blur="${this._handleMessage}"              
             />
+            <small id="passAlert" class="form-text text-muted"
+              >${this.message}</small
+            >
           </div>
           <div class="d-flex align-items-center justify-content-center">
             <button type="button" 
             class="btn btn-primary"
+            ?disabled=${this.buttonDisable}
             @click = "${(e) => this._handleSummit()}" >Submit</button>
           </div>
         </div>
@@ -109,16 +124,17 @@ class BasicElement extends LitElement {
 
   _setEmail(value){
     this.email = value;
+    //console.log('Email: '+this.email + ". validEmail: "+ this.validEmail);
   }
   _setPassword(value){
     this.password = value;
+    this._validatePasswordLength(this.password);
   }
   _handleSummit(){
     if (this.correctEmail === this.email && this.correctPassword === this.password){
       this.logged = true;
       return true;
-    } 
-    
+    }
     this.error = true;
     return false;
   }
@@ -133,6 +149,54 @@ class BasicElement extends LitElement {
     this.error = false;
     this.email = "";
     this.password = "";
+  }
+  //Funcion que compruebe si el email introducido es un email, mientras no lo sea, deshabilita el boton de submit
+  _validateEmail(email){
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+    {
+      this.validEmail = true;
+      //this.buttonDisable = "";
+      this._handleDisable();
+      //console.log("validEmail: "+this.validEmail + ". Disable: " + this.buttonDisable);
+      return true;
+    }
+    //console.log("Validación de email no pasada. validEmail: "+this.validEmail);
+    //this.buttonDisable = "disabled";
+    this._handleDisable();
+    //console.log("Disable: " + this.buttonDisable);
+    return false;
+  }
+  //Funcion que compruebe si el password es de al menos 4 caracteres, si no lo es, el boton de sumbit debe de estar deshabilitado
+  _validatePasswordLength(passwd){
+    if (passwd.length >= 4){
+      this.validPasswd = true;
+      this._handleDisable();
+      //console.log("Pass length: "+this.password.length + ". validPasswd : " + this.validPasswd);
+      //console.log("Mensaje: " + this.message);
+      return true;
+    }
+    this.validPasswd = false;
+    this._handleDisable();
+    //console.log("Pass length: "+this.password.length + ". validPasswd : " + this.validPasswd);
+    //console.log("Mensaje: " + this.message);
+    return false;
+  }
+  //función de controla el estado del botón Submit. Lo habilita si el email es un email válido y la password tiene 4 o más caracteres
+  _handleDisable(){
+    if ( this.validEmail && this.validPasswd){
+      this.buttonDisable = "";
+      return "";
+    }
+    this.buttonDisable = "disabled";
+  }
+
+  _handleMessage(){
+    if ( this.validPasswd ){
+      this.message="";
+      return this.message;
+    }
+    this.message="Password toooooo short";
+    return this.message;
   }
   
 }
