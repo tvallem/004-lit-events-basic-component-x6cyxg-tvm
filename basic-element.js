@@ -87,6 +87,10 @@ class BasicElement extends LitElement {
 
   get successMessage(){
     return html`
+      <basic-message texto="Bienvenido ${this.email}" tipo="success"></basic-message>
+    `;
+    /* Solución inicial del ejercicio sin extras
+    return html`
       <div class="alert alert-success" role="alert">
         Bienvenido ${this.email}
         <br />
@@ -95,10 +99,13 @@ class BasicElement extends LitElement {
           <button type="button" class="btn btn-success" @click="${(e) => this._handleLogOut()}">Log out</button>
       </div>
     `;
+    */
   }
 
   get errorMessage(){
     return html`
+      <basic-message texto="Password incorrecto, intenta de nuevo" tipo="danger"></basic-message>
+      <!--
       <div class="alert alert-danger" role="alert">
         password incorrecto, intenta de nuevo
         <br />
@@ -107,6 +114,7 @@ class BasicElement extends LitElement {
           <button type="button" class="btn btn-danger" @click="${(e) => this._handleRetry()}">reintentar</button>
         </div>
       </div>
+      -->
     `;
   }
 
