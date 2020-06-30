@@ -87,7 +87,7 @@ class BasicElement extends LitElement {
 
   get successMessage(){
     return html`
-      <basic-message texto="Bienvenido ${this.email}" tipo="success"></basic-message>
+      <basic-message texto="Bienvenido ${this.email}" tipo="success" @event-log-out=${(e) => this._handleLogOut()}></basic-message>
     `;
     /* Solución inicial del ejercicio sin extras
     return html`
@@ -104,7 +104,7 @@ class BasicElement extends LitElement {
 
   get errorMessage(){
     return html`
-      <basic-message texto="Password incorrecto, intenta de nuevo" tipo="danger"></basic-message>
+      <basic-message texto="Password incorrecto, intenta de nuevo" tipo="danger" @event-log-out=${(e) => this._handleLogOut()}></basic-message>
       <!--
       <div class="alert alert-danger" role="alert">
         password incorrecto, intenta de nuevo

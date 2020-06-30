@@ -5,6 +5,7 @@ class BasicMessage extends LitElement {
     return {
       texto: { type: String },
       tipo: { type: String },
+      evento: { type: String },
     };
   }
 
@@ -12,6 +13,7 @@ class BasicMessage extends LitElement {
     super();
     this.texto="";
     this.texto="";
+    this.evento="";
   }
 
   createRenderRoot() {
@@ -31,7 +33,8 @@ class BasicMessage extends LitElement {
   }
 
   _eventLogOut(){
-    this.dispatchEvent(new CustomEvent("log-out", { detail: eventLogOut }));
+    console.log("Evento de log-out");
+    this.dispatchEvent(new CustomEvent("event-log-out", { detail: {message: 'Saliendo'}}));
   }
 }
 
