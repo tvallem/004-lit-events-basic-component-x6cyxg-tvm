@@ -87,7 +87,9 @@ class BasicElement extends LitElement {
 
   get successMessage(){
     return html`
-      <basic-message texto="Bienvenido ${this.email}" tipo="success" @event-log-out=${(e) => this._handleLogOut()}></basic-message>
+      <div @event-log-out=${(e) => this._handleLogOut()}>
+      <basic-message texto="Bienvenido ${this.email}" tipo="success"></basic-message>
+      </div>
     `;
     /* Solución inicial del ejercicio sin extras
     return html`

@@ -34,7 +34,8 @@ class BasicMessage extends LitElement {
 
   _eventLogOut(){
     console.log("Evento de log-out");
-    this.dispatchEvent(new CustomEvent("event-log-out", { detail: {message: 'Saliendo'}}));
+    this.dispatchEvent(new CustomEvent("event-log-out", { detail: {message: 'Saliendo'},  bubbles: true, 
+    composed: true}));
   }
 }
 
